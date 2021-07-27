@@ -1,0 +1,26 @@
+{
+  "name": "employee-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/druludwig/12-employee-manager-app.git"
+  },
+  "author": "Dru Ludwig",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/druludwig/12-employee-manager-app/issues"
+  },
+  "homepage": "https://github.com/druludwig/12-employee-manager-app#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "express": "^4.17.1",
+    "inquirer": "^8.1.2",
+    "mysql2": "^2.2.5",
+    "uuid": "^8.3.2"
+  }
+}
