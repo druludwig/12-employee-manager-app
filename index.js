@@ -2,6 +2,8 @@ const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const { exit } = require('process');
 const cTable = require('console.table');
+const { v4: uuidv4 } = require('uuid');
+
 
 // connect to the database
 const con = mysql.createConnection({
@@ -99,33 +101,25 @@ function viewEmployees() {
 main()
 }
 
+function newDepartment(){
+    inquirer.prompt([
+        {
+        type: 'input',
+        name: 'newDept',
+        message: 'Enter NAME of new department:',
+        }])
 
-// function updateEmployee()
+        .then((response) => {
+            console.log(response.newDept)
+})}
+
+
+
+
 // function newEmployee()
-// function newDepartment()
 // function newRole()
 
+// function updateEmployee()
 
 main();
 
-
-
-
-
-
-
-
-
-
-
-
-
-// simple query
-// connection.query(
-//   'SELECT * FROM `table` WHERE `name` = "Page" AND `age` > 45',
-//   function(err, results, fields) {
-//     console.log(results); // results contains rows returned by server
-//     console.log(fields); // fields contains extra meta data about results, if available
-//   }
-// );
- 
