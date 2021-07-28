@@ -1,11 +1,16 @@
 # Employee Tracker v0.9
-  Launch App: <a href="http://www.meetdru.com/files/employee-tracker">http://www.meetdru.com/files/employee-tracker</a> <br />
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)<br />
-  ## Description<br />
-  A command-line app that demonstrates SQL queries...<br />listed options in different work order
+  Launch App: <a href="http://www.meetdru.com/files/employee-tracker">http://www.meetdru.com/files/employee-tracker</a>
+
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  ## Description
+  A command-line app that demonstrates SQL queries, dynamic UI lists, and 
+  
+  
+  listed options in different work order
 wrote queries in query.sql file and then copied them to index as a single line once it worked
 I ended up mixing different styles of JS in my effort to make this functional. I plan to refactor the code as my skills become more consistent
-
+  ## Next Version
+  - Add validators to 
 
   ## Contents
   - [Description](#Description)
