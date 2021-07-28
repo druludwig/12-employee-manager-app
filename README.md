@@ -3,7 +3,7 @@
 
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
   ## Description
-  A command-line app that demonstrates proficiency in basic SQL queries, dynamic UI lists, and asynchronous function essentials.
+  A command-line app that demonstrates proficiency in basic SQL queries, dynamic UI lists, and asynchronous function essentials. This app uses a human resources example to show links between employees, roles, and departments.
   
   ## Next Version
   - Add validators to user inputs.
