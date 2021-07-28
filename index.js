@@ -1,10 +1,9 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
+const table = require('console.table');
 const { exit } = require('process');
-let roleList;
 
 
-// connect to the database
 const con = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -12,7 +11,6 @@ const con = mysql.createConnection({
   database: 'employees_db'
 });
 
-// prepare department and role lists
 function loadLists() {
     con.query("SELECT id, name FROM department", (err, res) => {
       if (err) throw err;
@@ -29,6 +27,7 @@ function loadLists() {
   };
 
 function main() {
+
 console.log('-----------')
 inquirer.prompt([
     {
@@ -104,7 +103,16 @@ function viewRoles() {
 main()
 }
 
-function viewEmployees() {
+function displayRoles() {
+    con.promise().query("SELECT role.title AS Title, role.id AS ID, role.salary AS Salary,department.name AS Department FROM department JOIN role ON department.id = department_id;")
+    .then( ([rows,fields]) => {
+        console.log('\n\n\n---------- ALL Roles ----------');
+        console.table(rows);
+    })
+    .catch(console.log)
+}
+
+async function viewEmployees() {
     con.promise().query("SELECT employee.id AS ID, employee.first_name AS First, employee.last_name AS Last, role.title AS Title, department.name AS Department, role.salary AS Salary, CONCAT(m.first_name, ' ' ,m.last_name) AS Manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee m on employee.manager_id = m.id;")
     .then( ([rows,fields]) => {
         console.log('\n\n\n---------- ALL Employees ----------');
@@ -228,7 +236,7 @@ inquirer.prompt([
     con.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${response.first_name}', '${response.last_name}', ${role_id}, ${manager_id})`, (err, res) => {
       if (err) throw err;
       console.log('---------\n')
-      console.log(`SUCCESS: ${response.last}, ${response.first} added to list of roles.`);
+      console.log(`SUCCESS: ${response.last_name}, ${response.first_name} added to employee database.`);
       console.log('\n---------')
       main()
       
@@ -238,65 +246,42 @@ inquirer.prompt([
 }
 
 async function updateRole() {
-    let role = [];
-for (i = 0; i < roleList.length; i++) {
-    role.push( Object(roleList[i]) );
-};
-
-let manager = [];
-for (i = 0; i < managerList.length; i++) {
-    manager.push( Object(managerList[i]) );
-};
-
-inquirer.prompt([
-    {
-      name: "first_name",
-      type: "input",
-      message: "Enter FIRST NAME of new employee:"
+    displayRoles();
+    con.query("SELECT * FROM employee", async (err, employee) => {
+    const {person,role} = await inquirer.prompt([{
+        type: "list",
+        message: "Choose an employee to update:",
+        name: "person",
+        choices: () => {
+            return employee.map((employee) => employee.last_name);
+        },
     },
     {
-      name: "last_name",
-      type: "input",
-      message: "Enter LAST NAME of new employee:"
-    },
-    {
-      name: "role_id",
-      type: "list",
-      message: "Select a role:",
-      choices: role
-    },
-    {
-      name: "manager_id",
-      type: "list",
-      message: "Select a manager:",
-      choices: manager
+        type: "input",
+        message: "What is this employee's new role ID?",
+        name: "role",
+        
     }
-])
-
-.then(function(response) {
-    for (i = 0; i < role.length; i++) {
-      if (role[i].name == response.role_id) {
-        role_id = role[i].id
-      }
+]);
+    con.query(
+    "UPDATE employee SET ? WHERE ?",
+    [{
+            role_id: role,
+        },
+        {
+            last_name: person,
+        },
+    ],
+    function (err, res) {
+        if (err) throw err;
+        console.log(res.affectedRows + " products updated!\n");
+        // Call deleteProduct AFTER the UPDATE completes
+        viewEmployees();
     }
-    for (i = 0; i < manager.length; i++) {
-        if (manager[i].name == response.manager_id) {
-          manager_id = manager[i].id
-        }
-    }
-    con.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${response.first_name}', '${response.last_name}', ${role_id}, ${manager_id})`, (err, res) => {
-      if (err) throw err;
-      console.log('---------\n')
-      console.log(`SUCCESS: ${response.last}, ${response.first} added to list of roles.`);
-      console.log('\n---------')
-      main()
-      
-        })
-    })
-   
+    );
+    });
 }
-
-// prepare and start app
+        
 loadLists()
-main();
+main()
 
