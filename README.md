@@ -1,5 +1,5 @@
 # Employee Tracker v0.9
-  Launch App: <a href="http://www.meetdru.com/files/employee-tracker">http://www.meetdru.com/files/employee-tracker</a>
+  Video demo: <a href="http://www.meetdru.com/files/employee-tracker">http://www.meetdru.com/files/employee-tracker</a>
 
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
   ## Description
