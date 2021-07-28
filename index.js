@@ -66,7 +66,7 @@ inquirer.prompt([
 }
 
 function viewDepartments() {
-    con.promise().query("SELECT * FROM department;")
+    con.promise().query("SELECT id AS ID, name AS Name FROM department;")
     .then( ([rows,fields]) => {
         console.log('\n\n\n---------- ALL Departments ----------');
         console.table(rows);
@@ -101,23 +101,60 @@ function viewEmployees() {
 main()
 }
 
-function newDepartment(){
-    inquirer.prompt([
+
+    
+async function newDepartment() {
+    const response = await inquirer.prompt([
         {
-        type: 'input',
-        name: 'newDept',
-        message: 'Enter NAME of new department:',
+            type: 'input',
+            name: 'name',
+            message: 'Enter NAME of new department:',
         }])
+    con.query("INSERT INTO department SET ?", {
+        name: response.name},
+        function (err) {
+            if (err) throw err;
+            console.log('---------\n')
+            console.log(`SUCCESS: "${response.name}" added to department list.`);
+            console.log('\n---------')
+            main();
+        }
+    );
+}
 
-        .then((response) => {
-            console.log(response.newDept)
-})}
-
+async function newRole(){
+    const response = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'title',
+            message: 'Enter NAME of new role:'
+        },{
+            type: 'input',
+            name: 'salary',
+            message: 'Enter SALARY of new role (e.g. 50000):'
+        },{
+            type: 'input',
+            name: 'newDeptName',
+            message: 'Enter NAME of new department:',            
+        }
+    ])
+    con.query("INSERT INTO department SET ?", {
+        name: response.newDeptName},
+        function (err) {
+            if (err) throw err;
+            console.log('---------\n')
+            console.log(`SUCCESS: "${response.newDeptName}" added to department list.`);
+            console.log('\n---------')
+            main();
+        }
+    );
+}
 
 
 
 // function newEmployee()
-// function newRole()
+
+
 
 // function updateEmployee()
 
