@@ -9,6 +9,7 @@
   - Add validators to user inputs.
   - Add delete functionality.
   - I ended up mixing different styles of JS in my effort to make this functional. I plan to refactor the code.
+  - I also plan to test using the inquirer reactive interface functionality.
  
  
   ## License

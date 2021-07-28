@@ -9,9 +9,10 @@ const con = mysql.createConnection({
   user: 'root',
   password: 'password',
   database: 'employees_db'
-});
+}
+)
 
-function loadLists() {
+async function loadLists() {
     con.query("SELECT id, name FROM department", (err, res) => {
       if (err) throw err;
       deptList = res;
@@ -24,12 +25,17 @@ function loadLists() {
       if (err) throw err;
       managerList = res;
     })
-  };
+}
+
+function welcome() {
+console.log('-----------')
+console.log('Welcome to Employee Tracker v0.9')
+console.log('-----------')
+main()
+}
 
 function main() {
-
-console.log('-----------')
-inquirer.prompt([
+    inquirer.prompt([
     {
     type: 'list',
     choices: [  "View ALL Employees",
@@ -79,6 +85,18 @@ inquirer.prompt([
     }})
 }
 
+async function viewEmployees() {
+    con.promise().query("SELECT employee.id AS ID, employee.first_name AS First, employee.last_name AS Last, role.title AS Title, department.name AS Department, role.salary AS Salary, CONCAT(m.first_name, ' ' ,m.last_name) AS Manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee m on employee.manager_id = m.id;")
+    .then( ([rows,fields]) => {
+        console.log('\n\n\n---------- ALL Employees ----------');
+        console.table(rows);
+        console.log('Press up/down key to continue.')
+    })
+    .catch(console.log);
+
+main()
+}
+
 function viewDepartments() {
     con.promise().query("SELECT id AS ID, name AS Name FROM department;")
     .then( ([rows,fields]) => {
@@ -112,18 +130,6 @@ function displayRoles() {
     .catch(console.log)
 }
 
-async function viewEmployees() {
-    con.promise().query("SELECT employee.id AS ID, employee.first_name AS First, employee.last_name AS Last, role.title AS Title, department.name AS Department, role.salary AS Salary, CONCAT(m.first_name, ' ' ,m.last_name) AS Manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee m on employee.manager_id = m.id;")
-    .then( ([rows,fields]) => {
-        console.log('\n\n\n---------- ALL Employees ----------');
-        console.table(rows);
-        console.log('Press up/down key to continue.')
-    })
-    .catch(console.log);
-
-main()
-}
-    
 async function newDepartment() {
     const response = await inquirer.prompt([
         {
@@ -283,5 +289,5 @@ async function updateRole() {
 }
         
 loadLists()
-main()
+welcome()
 
